@@ -1,7 +1,7 @@
 import logging
-import pyromod
+import pyromod #type: ignore
 
-from motor.motor_asyncio import AsyncIOMotorClient as MongoCli
+from pymongo import AsyncMongoClient as MongoCli
 from pyrogram import Client
 from pyrogram.enums import ParseMode
 
@@ -40,9 +40,15 @@ class Anony(Client):
         self.name = self.me.first_name + " " + (self.me.last_name or "")
         self.username = self.me.username
         self.mention = self.me.mention
+        try:
+            await mongo.aconnect()
+            await mongo.admin.command("ping")
+        except Exception as e:
+            raise e
 
     async def stop(self):
         await super().stop()
+        await mongo.close()
 
 
-anony = anony()
+anony = Anony()
