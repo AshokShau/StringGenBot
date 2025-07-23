@@ -34,8 +34,8 @@ class Anony(Client):
             parse_mode=ParseMode.HTML,
         )
 
-    async def start(self):
-        await super().start()
+    async def start(self, *args, **kwargs):
+        await super().start(*args, **kwargs)
         self.id = self.me.id
         self.name = self.me.first_name + " " + (self.me.last_name or "")
         self.username = self.me.username
@@ -45,4 +45,4 @@ class Anony(Client):
         await super().stop()
 
 
-Anony = Anony()
+anony = anony()

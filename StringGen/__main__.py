@@ -3,13 +3,13 @@ import importlib
 
 from pyrogram import idle
 
-from StringGen import LOGGER, Anony
+from StringGen import LOGGER, anony
 from StringGen.modules import ALL_MODULES
 
 
 async def anony_boot():
     try:
-        await Anony.start()
+        await anony.start()
     except Exception as ex:
         LOGGER.error(ex)
         quit(1)
@@ -17,7 +17,7 @@ async def anony_boot():
     for all_module in ALL_MODULES:
         importlib.import_module("StringGen.modules." + all_module)
 
-    LOGGER.info(f"@{Anony.username} Started.")
+    LOGGER.info(f"@{anony.username} Started.")
     await idle()
 
 

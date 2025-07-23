@@ -1,12 +1,12 @@
 from pyrogram import filters
 from pyrogram.types import CallbackQuery
 
-from StringGen import Anony
+from StringGen import anony
 from StringGen.utils import gen_key
 from StringGen.modules.gen import gen_session
 
 
-@Anony.on_callback_query(
+@anony.on_callback_query(
     filters.regex(pattern=r"^(gensession|pyrogram|pyrogram1|telethon)$")
 )
 async def cb_choose(_, cq: CallbackQuery):
