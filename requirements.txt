@@ -1,6 +1,5 @@
 pymongo
 pyromod
-oldpyro==0.1.0
 kurigram
 python-dotenv
 telethon

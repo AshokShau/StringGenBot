@@ -1,13 +1,6 @@
 import asyncio
 
 from pyrogram import Client, filters
-from oldpyro import Client as Client1
-from oldpyro.errors import ApiIdInvalid as ApiIdInvalid1
-from oldpyro.errors import PasswordHashInvalid as PasswordHashInvalid1
-from oldpyro.errors import PhoneCodeExpired as PhoneCodeExpired1
-from oldpyro.errors import PhoneCodeInvalid as PhoneCodeInvalid1
-from oldpyro.errors import PhoneNumberInvalid as PhoneNumberInvalid1
-from oldpyro.errors import SessionPasswordNeeded as SessionPasswordNeeded1
 from pyrogram.errors import (
     ApiIdInvalid,
     FloodWait,
@@ -36,13 +29,9 @@ from StringGen import anony
 from StringGen.utils import retry_key
 
 
-async def gen_session(
-    message, user_id: int, telethon: bool = False, old_pyro: bool = False
-):
+async def gen_session(message, user_id: int, telethon: bool = False):
     if telethon:
         ty = f"ᴛᴇʟᴇᴛʜᴏɴ"
-    elif old_pyro:
-        ty = f"ᴩʏʀᴏɢʀᴀᴍ v1"
     else:
         ty = f"ᴩʏʀᴏɢʀᴀᴍ v2"
 
@@ -121,8 +110,6 @@ async def gen_session(
     await anony.send_message(user_id, "» ᴛʀʏɪɴɢ ᴛᴏ sᴇɴᴅ ᴏᴛᴩ ᴀᴛ ᴛʜᴇ ɢɪᴠᴇɴ ɴᴜᴍʙᴇʀ...")
     if telethon:
         client = TelegramClient(StringSession(), api_id, api_hash)
-    elif old_pyro:
-        client = Client1(":memory:", api_id=api_id, api_hash=api_hash)
     else:
         client = Client(name="Anony", api_id=api_id, api_hash=api_hash, in_memory=True)
     await client.connect()
@@ -140,13 +127,13 @@ async def gen_session(
             f"» ғᴀɪʟᴇᴅ ᴛᴏ sᴇɴᴅ ᴄᴏᴅᴇ ғᴏʀ ʟᴏɢɪɴ.\n\nᴘʟᴇᴀsᴇ ᴡᴀɪᴛ ғᴏʀ {f.value or f.x} sᴇᴄᴏɴᴅs ᴀɴᴅ ᴛʀʏ ᴀɢᴀɪɴ.",
             reply_markup=retry_key,
         )
-    except (ApiIdInvalid, ApiIdInvalidError, ApiIdInvalid1):
+    except (ApiIdInvalid, ApiIdInvalidError):
         return await anony.send_message(
             user_id,
             "» ᴀᴘɪ ɪᴅ ᴏʀ ᴀᴘɪ ʜᴀsʜ ɪs ɪɴᴠᴀʟɪᴅ.\n\nᴘʟᴇᴀsᴇ sᴛᴀʀᴛ ɢᴇɴᴇʀᴀᴛɪɴɢ ʏᴏᴜʀ sᴇssɪᴏɴ ᴀɢᴀɪɴ.",
             reply_markup=retry_key,
         )
-    except (PhoneNumberInvalid, PhoneNumberInvalidError, PhoneNumberInvalid1):
+    except (PhoneNumberInvalid, PhoneNumberInvalidError):
         return await anony.send_message(
             user_id,
             "» ᴘʜᴏɴᴇ ɴᴜᴍʙᴇʀ ɪɴᴠᴀʟɪᴅ.\n\nᴘʟᴇᴀsᴇ sᴛᴀʀᴛ ɢᴇɴᴇʀᴀᴛɪɴɢ ʏᴏᴜʀ sᴇssɪᴏɴ ᴀɢᴀɪɴ.",
@@ -175,19 +162,19 @@ async def gen_session(
             await client.sign_in(phone_number, otp, password=None)
         else:
             await client.sign_in(phone_number, code.phone_code_hash, otp)
-    except (PhoneCodeInvalid, PhoneCodeInvalidError, PhoneCodeInvalid1):
+    except (PhoneCodeInvalid, PhoneCodeInvalidError):
         return await anony.send_message(
             user_id,
             "» ᴛʜᴇ ᴏᴛᴩ ʏᴏᴜ'ᴠᴇ sᴇɴᴛ ɪs <b>ᴡʀᴏɴɢ.</b>\n\nᴩʟᴇᴀsᴇ sᴛᴀʀᴛ ɢᴇɴᴇʀᴀᴛɪɴɢ ʏᴏᴜʀ sᴇssɪᴏɴ ᴀɢᴀɪɴ.",
             reply_markup=retry_key,
         )
-    except (PhoneCodeExpired, PhoneCodeExpiredError, PhoneCodeExpired1):
+    except (PhoneCodeExpired, PhoneCodeExpiredError):
         return await anony.send_message(
             user_id,
             "» ᴛʜᴇ ᴏᴛᴩ ʏᴏᴜ'ᴠᴇ sᴇɴᴛ ɪs <b>ᴇxᴩɪʀᴇᴅ.</b>\n\nᴩʟᴇᴀsᴇ sᴛᴀʀᴛ ɢᴇɴᴇʀᴀᴛɪɴɢ ʏᴏᴜʀ sᴇssɪᴏɴ ᴀɢᴀɪɴ.",
             reply_markup=retry_key,
         )
-    except (SessionPasswordNeeded, SessionPasswordNeededError, SessionPasswordNeeded1):
+    except (SessionPasswordNeeded, SessionPasswordNeededError):
         try:
             pwd = await anony.ask(
                 identifier=(message.chat.id, user_id, None),
@@ -211,7 +198,7 @@ async def gen_session(
                 await client.sign_in(password=pwd)
             else:
                 await client.check_password(password=pwd)
-        except (PasswordHashInvalid, PasswordHashInvalidError, PasswordHashInvalid1):
+        except (PasswordHashInvalid, PasswordHashInvalidError):
             return await anony.send_message(
                 user_id,
                 "» ᴛʜᴇ ᴩᴀssᴡᴏʀᴅ ʏᴏᴜ'ᴠᴇ sᴇɴᴛ ɪs ᴡʀᴏɴɢ.\n\nᴩʟᴇᴀsᴇ sᴛᴀʀᴛ ɢᴇɴᴇʀᴀᴛɪɴɢ ʏᴏᴜʀ sᴇssɪᴏɴ ᴀɢᴀɪɴ.",

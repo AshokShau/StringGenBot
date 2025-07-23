@@ -21,9 +21,8 @@ async def cb_choose(_, cq: CallbackQuery):
         try:
             if query == "pyrogram":
                 await gen_session(cq.message, cq.from_user.id)
-            elif query == "pyrogram1":
-                await gen_session(cq.message, cq.from_user.id, old_pyro=True)
             elif query == "telethon":
                 await gen_session(cq.message, cq.from_user.id, telethon=True)
         except Exception as e:
-            await cq.edit_message_text(e, disable_web_page_preview=True)
+            await cq.edit_message_text(str(e), disable_web_page_preview=True)
+    return None
